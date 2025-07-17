@@ -1,0 +1,24 @@
+[package]
+name = "cdn"
+version = "0.0.0"
+edition = "2021"
+
+[dependencies]
+actix-cors = "0.7.0"
+actix-files = "0.6.6"
+actix-multipart = "0.7.2"
+actix-web = "4"
+chrono = "0.4"
+include-crypt = "0.1.1"
+mongodb = "3.1.0"
+rand = "0.8.5"
+serde = { version = "1.0", features = ["derive"] }
+tokio = { version = "1.38.0", features = ["macros", "rt-multi-thread"] }
+
+[profile.release]
+lto = true
+opt-level = "s"
+debug = false
+panic = "abort"
+strip = "symbols"
+codegen-units = 1

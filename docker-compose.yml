@@ -1,0 +1,61 @@
+name: loli-services
+
+services:
+  rabbitmq:
+    image: "rabbitmq:management"
+    container_name: "brockers"
+    ports:
+      - "5672:5672"   # Порт для подключения клиентов RabbitMQ
+      - "15672:15672" # Порт для веб-менеджера (RabbitMQ Management Plugin)
+    environment:
+      RABBITMQ_DEFAULT_USER: "user"   # Имя пользователя по умолчанию
+      RABBITMQ_DEFAULT_PASS: "password" # Пароль пользователя по умолчанию
+    volumes:
+      - "rabbitmq_data:/var/lib/rabbitmq"
+    networks:
+      - backend_network
+
+  postgresql:
+    image: "postgres:latest"
+    container_name: "database"
+    environment:
+      POSTGRES_USER: "user"
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_DB: "example_db"
+    ports:
+      - "5432:5432" # Порт для подключения к PostgreSQL
+    volumes:
+      - "postgres_data:/var/lib/postgresql/data"
+    networks:
+      - backend_network
+
+  redis:
+    image: "redis:latest"
+    container_name: "database"
+    ports:
+      - "6379:6379" # Порт для подключения к Redis
+    networks:
+      - backend_network
+
+  scylladb:
+    image: "scylladb/scylla"
+    container_name: "database"
+    ports:
+      - "9042:9042" # Порт для подключения к ScyllaDB
+    environment:
+      - SCYLLA_CLUSTER_NAME=scylla-cluster
+      - SCYLLA_DC=dc1
+      - SCYLLA_RACK=rack1
+    volumes:
+      - "scylla_data:/var/lib/scylla"
+    networks:
+      - backend_network
+
+volumes:
+  rabbitmq_data:
+  postgres_data:
+  scylla_data:
+
+networks:
+  backend_network:
+    driver: bridge
